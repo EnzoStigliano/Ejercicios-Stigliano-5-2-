@@ -13,11 +13,13 @@ void limpiarConsola() {
 
 //Función para inicializar un tablero con las medidas que determinó el usuario
 //Pirata y tesoro random
-int inicializarTablero(int **tablero, int f, int c, int posicionPirata[2])
+int inicializarTablero(int **tablero, int n, int posicionPirata[2])
 {
     srand(time(NULL));
     int i;
     int j;
+    int f = n;
+    int c = n;
     int fr = 0;
     int cr = 0;
 
@@ -31,8 +33,8 @@ int inicializarTablero(int **tablero, int f, int c, int posicionPirata[2])
     }
 
     //Generar valores aleatorios entre 1 y las filas/columnas - 2
-    fr = rand() % (f - 2) + 1;
-    cr = rand() % (c - 2) + 1;
+    fr = rand() % (n - 2) + 1;
+    cr = rand() % (n - 2) + 1;
 
     //Colocar el pirata y guardar su posición
     tablero[fr][cr] = 1;
@@ -42,17 +44,19 @@ int inicializarTablero(int **tablero, int f, int c, int posicionPirata[2])
     //Generar valores aleatorios para el tesoro
     do
     {
-        fr = rand() % (f - 2) + 1;
-        cr = rand() % (c - 2) + 1;
+        fr = rand() % (n - 2) + 1;
+        cr = rand() % (n - 2) + 1;
     } while (tablero[fr][cr] == 1); //Asegurarme que la posición no sea la misma que la del pirata
 
     tablero[fr][cr] = 2; //Colocar el tesoro
 }
 
-void dibujarTablero(int **tablero, int f, int c)
+void dibujarTablero(int **tablero, int n)
 {
     int i;
     int j;
+    int f = n;
+    int c = n;
 
     for (i = 0; i < f; i++)
     {
@@ -80,7 +84,7 @@ void dibujarTablero(int **tablero, int f, int c)
     }
 }
 
-int moverPirata(int posicionPirata[2], char mov, int **tablero, int f, int c, int *encontrado)
+int moverPirata(int posicionPirata[2], char mov, int **tablero, int n, int *encontrado)
 {
     int posicionAntigua[2]; //Array para guardar la posición antigua del pirata, se usa para la actualización
 
@@ -98,14 +102,14 @@ int moverPirata(int posicionPirata[2], char mov, int **tablero, int f, int c, in
         break;
 
     case 's':
-        if (posicionPirata[0] + 1 != f - 1)
+        if (posicionPirata[0] + 1 != n - 1)
         {
             posicionPirata[0]++; //Mover hacia abajo
         }
         break;
 
     case 'e':
-        if (posicionPirata[1] + 1 != c - 1)
+        if (posicionPirata[1] + 1 != n - 1)
         {
             posicionPirata[1]++; //Mover hacia la derecha
         }
@@ -133,8 +137,7 @@ int moverPirata(int posicionPirata[2], char mov, int **tablero, int f, int c, in
 
 int main(void)
 {
-    int filas;
-    int columnas; 
+    int n;
     int encontrado = 0; // Variable para verificar si se encontró el tesoro
     int posicionPirata[2]; // Coordenadas del pirata en el tablero
     char mov; // Dirección de movimiento ingresada por el usuario
@@ -149,31 +152,25 @@ int main(void)
         do
         {
             //Ingreso de cantidad de filas y columnas
-            printf("Ingrese la cantidad de filas del tablero (minimo 4): ");
-            scanf("%d", &filas);
-            printf("Ingrese la cantidad de columnas del tablero (minimo 4): ");
-            scanf("%d", &columnas);
+            printf("Ingrese la dimension del tablero (minimo 2): ");
+            scanf("%d", &n);
 
             //Verificar si las filas y columnas cumplen con el mínimo
-            if (filas < 4)
+            if (n < 2)
             {
                 printf("\nLa cantidad de filas no cumple con el minimo requerido\n");
             }
-            if (columnas < 4)
-            {
-                printf("\nLa cantidad de columnas no cumple con el minimo requerido\n");
-            }
-        } while (filas < 4 || columnas < 4); //Seguir preguntando si las filas o las columnas no cumplen con el mínimo
+        } while (n < 2); //Seguir preguntando si las filas o las columnas no cumplen con el mínimo
 
         // Reservación de memoria para el puntero del tablero
-        int **tablero = (int **)malloc(filas * sizeof(int *));
-        for (i = 0; i < filas; i++)
+        int **tablero = (int **)malloc(n * sizeof(int *));
+        for (i = 0; i < n; i++)
         {
-            tablero[i] = (int *)malloc(columnas * sizeof(int));
+            tablero[i] = (int *)malloc(n * sizeof(int));
         }
 
-        inicializarTablero(tablero, filas, columnas, posicionPirata); // Inicializar el tablero
-        dibujarTablero(tablero, filas, columnas); // Dibujar el tablero
+        inicializarTablero(tablero, n, posicionPirata); // Inicializar el tablero
+        dibujarTablero(tablero, n); // Dibujar el tablero
 
         // Bucle de turnos del juego
         while (encontrado != 1 && turnos > 0)
@@ -182,8 +179,8 @@ int main(void)
             printf("Ingrese la direccion a la que se quiere mover (n = arriba, s = abajo, e = derecha, o = izquierda): ");
             scanf(" %c", &mov); 
             limpiarConsola(); // Limpiar la consola 
-            moverPirata(posicionPirata, mov, tablero, filas, columnas, &encontrado); // Mover al pirata
-            dibujarTablero(tablero, filas, columnas); // Dibujar el tablero actualizado
+            moverPirata(posicionPirata, mov, tablero, n, &encontrado); // Mover al pirata
+            dibujarTablero(tablero, n); // Dibujar el tablero actualizado
             if (encontrado == 1)
             {
                 printf("Encontraste el tesoro!\n"); 
@@ -197,7 +194,7 @@ int main(void)
         }
 
         // Liberar la memoria utilizada
-        for (i = 0; i < filas; i++)
+        for (i = 0; i < n; i++)
         {
             free(tablero[i]);
         }
