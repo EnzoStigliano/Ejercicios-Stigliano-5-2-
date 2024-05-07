@@ -31,6 +31,7 @@ int inicializarTablero(int **tablero, int f, int c, int posicionPirata[2])
         {1, 1, 1, 0},
         {1, 1, 1, 1}
     }
+    int casillaActual[4];
     int i;
     int j;
     int fr = 0;
@@ -39,18 +40,40 @@ int inicializarTablero(int **tablero, int f, int c, int posicionPirata[2])
     int columnaPirata;
     int sp;
     int flag = 0;
+    int random;
 
-    fr = rand() % (f - 2) + 1;
-    cr = rand() % (c - 2) + 1;
+    fr = rand() % (f - 1) + 1;
+    cr = rand() % (c - 1) + 1;
 
     tablero[fr][cr] = 0;
 
-    rand()
+    random = (rand()%13) + 1;
+
+    aux = rand() % 3;
+
+    if(casillas[random][aux] == 1){
+        switch(aux){
+            case 0: //Buscar 1 en 1 
+                break;
+            case 1: //Buscar 1 en 0 
+                break;
+            case 2: //Buscar 1 en 3 
+                break;
+            case 3: //Buscar 1 en 2 
+                break;
+        }
+    }
+
+    for(i = 0; i < 4; i++){
+        casillaActual[i] = casillas[random][i];
+    }
 
     fr++;
     fr--;
     cr++;
     cr--;
+
+    tablero[fr][cr] = 0;
 }
 
 void dibujarTablero(int **tablero, int f, int c)
