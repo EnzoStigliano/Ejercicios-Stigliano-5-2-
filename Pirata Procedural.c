@@ -13,7 +13,7 @@ void limpiarConsola() {
 int inicializarTablero(int **tablero, int f, int c, int posicionPirata[2])
 {
     srand(time(NULL));
-    int casillas = {
+    int casillas = { //1 si tiene salida a la: izquierda, derecha, arriba, abajo
         {0, 0, 0, 0},
         {0, 0, 0, 1},
         {0, 0, 1, 0},
@@ -41,39 +41,69 @@ int inicializarTablero(int **tablero, int f, int c, int posicionPirata[2])
     int sp;
     int flag = 0;
     int random;
+    int casillaSiguiente;
 
-    fr = rand() % (f - 1) + 1;
-    cr = rand() % (c - 1) + 1;
-
-    tablero[fr][cr] = 0;
-
-    random = (rand()%13) + 1;
-
-    aux = rand() % 3;
-
-    if(casillas[random][aux] == 1){
-        switch(aux){
-            case 0: //Buscar 1 en 1 
-                break;
-            case 1: //Buscar 1 en 0 
-                break;
-            case 2: //Buscar 1 en 3 
-                break;
-            case 3: //Buscar 1 en 2 
-                break;
+    //Rellenar todo de 1
+    for(i=0;i<f;i<++){
+        for(j=0;j<c;j++){
+            tablero[i][j] = 1;
         }
     }
 
+    //Colocar primer bloque de tierra
+    fr = rand() % (f - 1) + 1;
+    cr = rand() % (c - 1) + 1;
+    tablero[fr][cr] = 0;
+
+    //N de casilla random
+    random = (rand()%13) + 1;
+
     for(i = 0; i < 4; i++){
-        casillaActual[i] = casillas[random][i];
+        casillaActual[i] = casillas[random][i]; //Salidas de la casilla actual
     }
 
-    fr++;
-    fr--;
-    cr++;
-    cr--;
+    //Repetir cantidad de salidas
 
-    tablero[fr][cr] = 0;
+    //Seleccionar salida
+    do {
+        aux = rand() % 3; //Posicion salida
+    } while(casillaActual[aux] == 0);
+
+    casillaSiguiente = (rand()%13) + 1; //N de casilla siguiente
+    switch(aux){
+        case 0: //Ver si tiene salida a la derecha
+            if(casillas[casillaSiguiente][1] == 1){
+                if(cr+1 != c-1){ //Fijarse si se choca o no con el borde
+                    tablero[fr][cr+1] = 0; //Colocar nuevo bloque de tierra
+                }
+                else flag = 1; //Indicar si se choca
+            }
+            break;
+        case 1: //Ver si tiene salida a la izquierda
+            if(casillas[casillaSiguiente][0] == 1){
+                if(cr-1 != c-1){ //Fijarse si se choca o no con el borde
+                    tablero[fr][cr+1] = 0; //Colocar nuevo bloque de tierra
+                }
+                else flag = 1; //Indicar si se choca
+            }
+            break;
+        case 2: //Ver si tiene salida abajo
+            if(casillas[casillaSiguiente][3] == 1){
+                if(fr+1 != f-1){ //Fijarse si se choca o no con el borde
+                    tablero[fr][cr+1] = 0; //Colocar nuevo bloque de tierra
+                }
+                else flag = 1; //Indicar si se choca
+            }
+            break;
+        case 3: //Ver si tiene salida arriba
+            if(casillas[casillaSiguiente][2] == 1){
+                if(cr+1 != c-1){ //Fijarse si se choca o no con el borde
+                    tablero[fr][cr+1] = 0; //Colocar nuevo bloque de tierra
+                }
+                else flag = 1; //Indicar si se choca
+            }
+            break;
+    }
 }
 
 void dibujarTablero(int **tablero, int f, int c)
