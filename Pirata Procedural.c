@@ -13,6 +13,7 @@ void limpiarConsola() {
 int inicializarTablero(int **tablero, int f, int c, int posicionPirata[2])
 {
     srand(time(NULL));
+    int salidas[f][c]; //Matriz donde se guardarán las salidas
     int casillas = { //1 si tiene salida a la: izquierda, derecha, arriba, abajo
         {0, 0, 0, 0},
         {0, 0, 0, 1},
@@ -31,78 +32,68 @@ int inicializarTablero(int **tablero, int f, int c, int posicionPirata[2])
         {1, 1, 1, 0},
         {1, 1, 1, 1}
     }
-    int casillaActual[4];
     int i;
     int j;
     int fr = 0;
     int cr = 0;
-    int filaPirata;
-    int columnaPirata;
-    int sp;
     int flag = 0;
-    int random;
-    int casillaSiguiente;
+    int salida;
 
-    //Rellenar todo de 1
-    for(i=0;i<f;i<++){
+    //Rellenar todo de 0
+    for(i=0;i<f;i++){
         for(j=0;j<c;j++){
-            tablero[i][j] = 1;
+            salidas[i][j] = 16;
         }
     }
 
     //Colocar primer bloque de tierra
     fr = rand() % (f - 1) + 1;
     cr = rand() % (c - 1) + 1;
-    tablero[fr][cr] = 0;
 
     //N de casilla random
-    random = (rand()%13) + 1;
+    salida = (rand()%15) + 1;
 
-    for(i = 0; i < 4; i++){
-        casillaActual[i] = casillas[random][i]; //Salidas de la casilla actual
-    }
+    salidas[fr][cr] = salida;
 
-    //Repetir cantidad de salidas
+    while(1==1){
+        for(i=0;i<f;i++){
+            for(j=0;j<c;j++){
+                if(salidas[i][j] == 16){
+                    //Izquierda
+                    if(salidas[i][j-1] != 16){
+                        if(salidas[salidas[i][j-1]][0] == 1){
+                            salida = (rand()%15) + 1;
+                            salidas[i][j] = salida;
+                        }
+                    }
 
-    //Seleccionar salida
-    do {
-        aux = rand() % 3; //Posicion salida
-    } while(casillaActual[aux] == 0);
+                    //Arriba
+                    if(salidas[i-1][j] != 16){
+                        if(salidas[salidas[i-1][j]][2] == 1){
+                            salida = (rand()%15) + 1;
+                            salidas[i][j] = salida;
+                        }
+                    }
 
-    casillaSiguiente = (rand()%13) + 1; //N de casilla siguiente
-    switch(aux){
-        case 0: //Ver si tiene salida a la derecha
-            if(casillas[casillaSiguiente][1] == 1){
-                if(cr+1 != c-1){ //Fijarse si se choca o no con el borde
-                    tablero[fr][cr+1] = 0; //Colocar nuevo bloque de tierra
+                    //Derecha
+                    if(salidas[i][j+1] != 16){
+                        if(salidas[salidas[i][j+1]][1] == 1){
+                            salida = (rand()%15) + 1;
+                            salidas[i][j] = salida;
+                        }
+                    }
+
+                    //Abajo
+                    if(salidas[i+1][j] != 16){
+                        if(salidas[salidas[i+1][j]][3] == 1){
+                            salida = (rand()%15) + 1;
+                            salidas[i][j] = salida;
+                        }
+                    }
                 }
-                else flag = 1; //Indicar si se choca
+                
             }
-            break;
-        case 1: //Ver si tiene salida a la izquierda
-            if(casillas[casillaSiguiente][0] == 1){
-                if(cr-1 != c-1){ //Fijarse si se choca o no con el borde
-                    tablero[fr][cr+1] = 0; //Colocar nuevo bloque de tierra
-                }
-                else flag = 1; //Indicar si se choca
-            }
-            break;
-        case 2: //Ver si tiene salida abajo
-            if(casillas[casillaSiguiente][3] == 1){
-                if(fr+1 != f-1){ //Fijarse si se choca o no con el borde
-                    tablero[fr][cr+1] = 0; //Colocar nuevo bloque de tierra
-                }
-                else flag = 1; //Indicar si se choca
-            }
-            break;
-        case 3: //Ver si tiene salida arriba
-            if(casillas[casillaSiguiente][2] == 1){
-                if(cr+1 != c-1){ //Fijarse si se choca o no con el borde
-                    tablero[fr][cr+1] = 0; //Colocar nuevo bloque de tierra
-                }
-                else flag = 1; //Indicar si se choca
-            }
-            break;
+        }
     }
 }
 
