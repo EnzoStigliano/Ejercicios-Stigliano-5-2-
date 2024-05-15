@@ -14,7 +14,7 @@ int inicializarTablero(int **tablero, int f, int c, int posicionPirata[2])
 {
     srand(time(NULL));
     int salidas[f][c]; //Matriz donde se guardarán las salidas
-    int casillas = { //1 si tiene salida a la: izquierda, derecha, arriba, abajo
+    int casillas[16][4] = { //1 si tiene salida a la: izquierda, derecha, arriba, abajo
         {0, 0, 0, 0},
         {0, 0, 0, 1},
         {0, 0, 1, 0},
@@ -31,13 +31,14 @@ int inicializarTablero(int **tablero, int f, int c, int posicionPirata[2])
         {1, 1, 0, 1},
         {1, 1, 1, 0},
         {1, 1, 1, 1}
-    }
+    };
     int i;
     int j;
     int fr = 0;
     int cr = 0;
     int flag = 0;
     int salida;
+    int dungeons = 0;
 
     //Rellenar todo de 0
     for(i=0;i<f;i++){
@@ -47,8 +48,8 @@ int inicializarTablero(int **tablero, int f, int c, int posicionPirata[2])
     }
 
     //Colocar primer bloque de tierra
-    fr = rand() % (f - 1) + 1;
-    cr = rand() % (c - 1) + 1;
+    fr = rand() % (f - 1);
+    cr = rand() % (c - 1);
 
     //N de casilla random
     salida = (rand()%15) + 1;
@@ -60,34 +61,38 @@ int inicializarTablero(int **tablero, int f, int c, int posicionPirata[2])
             for(j=0;j<c;j++){
                 if(salidas[i][j] == 16){
                     //Izquierda
-                    if(salidas[i][j-1] != 16){
+                    if(j-1 >= 0 && salidas[i][j-1] != 16){
                         if(salidas[salidas[i][j-1]][0] == 1){
                             salida = (rand()%15) + 1;
                             salidas[i][j] = salida;
+                            dungeons++;
                         }
                     }
 
                     //Arriba
-                    if(salidas[i-1][j] != 16){
+                    if(i-1 >= 0 && salidas[i-1][j] != 16){
                         if(salidas[salidas[i-1][j]][2] == 1){
                             salida = (rand()%15) + 1;
                             salidas[i][j] = salida;
+                            dungeons++;
                         }
                     }
 
                     //Derecha
-                    if(salidas[i][j+1] != 16){
+                    if(j1 >= 0 && salidas[i][j+1] != 16){
                         if(salidas[salidas[i][j+1]][1] == 1){
                             salida = (rand()%15) + 1;
                             salidas[i][j] = salida;
+                            dungeons++;
                         }
                     }
 
                     //Abajo
-                    if(salidas[i+1][j] != 16){
+                    if(i+1 >= 0 && salidas[i+1][j] != 16){
                         if(salidas[salidas[i+1][j]][3] == 1){
                             salida = (rand()%15) + 1;
                             salidas[i][j] = salida;
+                            dungeons++;
                         }
                     }
                 }
