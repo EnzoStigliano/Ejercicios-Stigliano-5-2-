@@ -32,13 +32,15 @@ int inicializarTablero(int **tablero, int f, int c, int posicionPirata[2])
         {1, 1, 1, 0},
         {1, 1, 1, 1}
     };
-    int i;
+    int i; 
     int j;
     int fr = 0;
     int cr = 0;
-    int flag = 0;
-    int salida;
-    int dungeons = 0;
+    int onoff == 1; //iniciar o detener la generación de tierra
+    int flag = 0; //verificar si se genero un bloque de tierra
+    int salida; //numero asignado
+    int dungeons = 0; //cantidad de tierra generada proceduralmente
+    int grwt; //ground water
 
     //Rellenar todo de 0
     for(i=0;i<f;i++){
@@ -50,13 +52,16 @@ int inicializarTablero(int **tablero, int f, int c, int posicionPirata[2])
     //Colocar primer bloque de tierra
     fr = rand() % (f - 1);
     cr = rand() % (c - 1);
+    posicionPirata[0] = fr;
+    posicionPirata[1] = cr;
 
     //N de casilla random
     salida = (rand()%15) + 1;
 
     salidas[fr][cr] = salida;
 
-    while(1==1){
+    while(onoff == 1){
+        flag == 0;
         for(i=0;i<f;i++){
             for(j=0;j<c;j++){
                 if(salidas[i][j] == 16){
@@ -66,6 +71,7 @@ int inicializarTablero(int **tablero, int f, int c, int posicionPirata[2])
                             salida = (rand()%15) + 1;
                             salidas[i][j] = salida;
                             dungeons++;
+                            flag = 1;
                         }
                     }
 
@@ -75,6 +81,7 @@ int inicializarTablero(int **tablero, int f, int c, int posicionPirata[2])
                             salida = (rand()%15) + 1;
                             salidas[i][j] = salida;
                             dungeons++;
+                            flag = 1;
                         }
                     }
 
@@ -84,6 +91,7 @@ int inicializarTablero(int **tablero, int f, int c, int posicionPirata[2])
                             salida = (rand()%15) + 1;
                             salidas[i][j] = salida;
                             dungeons++;
+                            flag = 1;
                         }
                     }
 
@@ -93,10 +101,23 @@ int inicializarTablero(int **tablero, int f, int c, int posicionPirata[2])
                             salida = (rand()%15) + 1;
                             salidas[i][j] = salida;
                             dungeons++;
+                            flag = 1;
                         }
                     }
                 }
-                
+            }
+        }
+        if(flag == 0) onoff == 0;
+    }
+
+    for(i=0;i<f;i++){
+        for(j=0;j<c;j++){
+            if(salidas[i][j] != 16){
+                tablero[i][j] = 0;
+            }
+            else {
+                grwt = rand() % 1;
+                tablero[i][j] == grwt;
             }
         }
     }
@@ -111,23 +132,7 @@ void dibujarTablero(int **tablero, int f, int c)
     {
         for (j = 0; j < c; j++)
         {
-            if (i == 0 && j == c - 1)
-            {
-                printf("P ");
-            }
-            else if (j == 0 && i == f - 1)
-            {
-                printf("P ");
-            }
-            else if (i == 0 || i == f - 1 || j == 0 || j == c - 1)
-            {
-                printf("A ");
-            }
-            else if(tablero[i][j] == 1){
-                printf("1 ");
-            }
-            else
-                printf("0 ");
+            if(tablero[i][j] ==)
         }
         printf("\n");
     }
