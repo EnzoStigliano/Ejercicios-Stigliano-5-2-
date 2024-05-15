@@ -41,6 +41,8 @@ int inicializarTablero(int **tablero, int f, int c, int posicionPirata[2])
     int salida; //numero asignado
     int dungeons = 0; //cantidad de tierra generada proceduralmente
     int grwt; //ground water
+    int tesoro;
+    int aux2;
 
     //Rellenar todo de 0
     for(i=0;i<f;i++){
@@ -108,6 +110,19 @@ int inicializarTablero(int **tablero, int f, int c, int posicionPirata[2])
             }
         }
         if(flag == 0) onoff == 0;
+
+        for(i=0; i<f; i++){
+            for(j=0; j<c; j++){
+                if(aux2 == 0 && aux == dungeons && salidas[i][j] != 16){
+                    aux++;
+                    tesoro = rand() % (dungeons-1);
+                    if(tesoro == 1){
+                        tablero[i][j] = 20;
+                        aux2 = 1;
+                    }
+                }
+            }
+        }
     }
 
     for(i=0;i<f;i++){
