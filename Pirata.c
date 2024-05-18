@@ -14,7 +14,7 @@ int inicializarTablero(int **tablero, int f, int c, int posicionPirata[2])
 {
     srand(time(NULL));
     int salidas[f][c]; //Matriz donde se guardarán las salidas
-    int casillas[16][4] = { //Lista de posibles salidas, si tiene un 1 es porque tiene salida para ese lado. Orden: izquierda, derecha, arriba, abajo
+    int dungeons[16][4] = { //Lista de posibles salidas, si tiene un 1 es porque tiene salida para ese lado. Orden: izquierda, derecha, arriba, abajo
         {0, 0, 0, 0},
         {0, 0, 0, 1},
         {0, 0, 1, 0},
@@ -39,7 +39,7 @@ int inicializarTablero(int **tablero, int f, int c, int posicionPirata[2])
     int onoff = 1; //iniciar o detener la generación de tierra
     int flag = 0; //verificar si se genero un bloque de tierra
     int salida; //numero asignado
-    int dungeons = 0; //cantidad de tierra generada proceduralmente
+    int cantDungeons = 0; //cantidad de tierra generada proceduralmente
     int grwt; //ground water
     int tesoro; //Número random para poner el tesoro
     int aux = 0;
@@ -52,8 +52,8 @@ int inicializarTablero(int **tablero, int f, int c, int posicionPirata[2])
     }
 
     //Generar coordenadas para el pirata
-    fr = rand() % (f - 1);
-    cr = rand() % (c - 1);
+    fr = rand() % f;
+    cr = rand() % c;
     posicionPirata[0] = fr;
     posicionPirata[1] = cr;
 
@@ -65,70 +65,60 @@ int inicializarTablero(int **tablero, int f, int c, int posicionPirata[2])
 
     //Generación procedural de tierra
     while(onoff == 1){
-        flag == 0;
+        flag = 0;
         for(i=0;i<f;i++){
             for(j=0;j<c;j++){
                 if(salidas[i][j] == 16){
                     //Cada vez que se genere un bloque de tierra se contará la cantidad de éstos generados y si efectivamente se ha generado alguno
                     //Generar un bloque de tierra si hay otro a la izquierda y si además éste tiene salida hacia la derecha
                     if(j-1 >= 0 && salidas[i][j-1] != 16){
-                        if(salidas[salidas[i][j-1]][0] == 1){
-                            salida = (rand()%15) + 1;
+                        if(dungeons[salidas[i][j-1]][0] == 1){
+                            salida = rand() % 15;
                             salidas[i][j] = salida;
-                            dungeons++;
+                            cantDungeons++;
                             flag = 1;
                         }
-                    }
-
-                    //Generar un bloque de tierra si hay otro arriba y si además éste tiene salida hacia abajo
-                    if(i-1 >= 0 && salidas[i-1][j] != 16){
-                        if(salidas[salidas[i-1][j]][2] == 1){
-                            salida = (rand()%15) + 1;
+                    } else if(i-1 >= 0 && salidas[i-1][j] != 16){ //Generar un bloque de tierra si hay otro arriba y si además éste tiene salida hacia abajo
+                        if(dungeons[salidas[i-1][j]][2] == 1){
+                            salida = rand() % 15;
                             salidas[i][j] = salida;
-                            dungeons++;
+                            cantDungeons++;
                             flag = 1;
                         }
-                    }
-
-                    //Generar un bloque de tierra si hay otro a la derecha y si además éste tiene salida hacia la izquierda
-                    if(j+1 >= 0 && salidas[i][j+1] != 16){
-                        if(salidas[salidas[i][j+1]][1] == 1){
-                            salida = (rand()%15) + 1;
+                    } else if(j+1 < c && salidas[i][j+1] != 16){ //Generar un bloque de tierra si hay otro a la derecha y si además éste tiene salida hacia la izquierda
+                        if(dungeons[salidas[i][j+1]][1] == 1){
+                            salida = rand() % 15;
                             salidas[i][j] = salida;
-                            dungeons++;
+                            cantDungeons++;
                             flag = 1;
                         }
-                    }
-
-                    //Generar un bloque de tierra si hay otro abajo y si además éste tiene salida hacia arriba
-                    if(i+1 >= 0 && salidas[i+1][j] != 16){
-                        if(salidas[salidas[i+1][j]][3] == 1){
-                            salida = (rand()%15) + 1;
+                    }else if(i+1 < f && salidas[i+1][j] != 16){ //Generar un bloque de tierra si hay otro abajo y si además éste tiene salida hacia arriba
+                        if(dungeons[salidas[i+1][j]][3] == 1){
+                            salida = rand() % 15;
                             salidas[i][j] = salida;
-                            dungeons++;
+                            cantDungeons++;
                             flag = 1;
                         }
                     }
                 }
             }
         }
-        if(flag == 0) onoff == 0; //Si no se generó ningún bloque de tierra se detiene el bucle
+        if(flag == 0) onoff = 0; //Si no se generó ningún bloque de tierra se detiene el bucle
     }
 
     for(i=0; i<f; i++){
             for(j=0; j<c; j++){
                 //Generar el tesoro en un bloque de tierra con la misma probabilidad de estar en cualquiera previamente generado
                 if(salidas[i][j] != 16){
-                    tesoro = rand() % (dungeons-1);
-                    if(tesoro == 1){
+                    tesoro = rand() % cantDungeons;
+                    if(tesoro == 0){
                         tablero[i][j] = 20; //Colocar tesoro
-                        j = c; //Detener bucle columnas
-                        i = f; //Detener bucle filas
+                        break;
                     }
                     else aux++; //Contador de bloques de tierra donde no se generó el tesoro
                 }
                 //Generar el tesoro en el último bloque de tierra en caso de que no se haya generado en los otros bloques
-                if(aux == dungeons && salidas[i][j] != 16){
+                if(aux == cantDungeons && salidas[i][j] != 16){
                     tablero[i][j] = 20;
                 }
             }
@@ -142,9 +132,9 @@ int inicializarTablero(int **tablero, int f, int c, int posicionPirata[2])
             if(salidas[i][j] != 16 && tablero[i][j] != 20 && tablero[i][j] != 21){
                 tablero[i][j] = 0;
             }
-            else {
-                grwt = rand() % 1;
-                tablero[i][j] == grwt;
+            else if(tablero[i][j] != 20 && tablero[i][j] != 21){
+                grwt = rand() % 2;
+                tablero[i][j] = grwt;
             }
         }
     }
@@ -169,7 +159,7 @@ void dibujarTablero(int **tablero, int f, int c)
                     break;
 
                 case 20:
-                    printf("0");
+                    printf("T");
                     break;
 
                 case 21:
@@ -191,35 +181,35 @@ int moverPirata(int posicionPirata[2], char mov, int **tablero, int f, int c, in
     switch (mov)
     {
     case 'n':
-        if (tablero[posicionPirata[0]-1][posicionPirata[1]] != 1) //Fijarse si arriba no hay agua
+        if (posicionPirata[0]-1 >= 0 && tablero[posicionPirata[0]-1][posicionPirata[1]] != 1) //Fijarse si arriba no hay agua
         {
             posicionPirata[0]--;
         }
         break;
 
     case 's':
-        if (tablero[posicionPirata[0]+1][posicionPirata[1]] != 1) //Fijarse si abajo no hay agua
+        if (posicionPirata[0]+1 < f && tablero[posicionPirata[0] + 1][posicionPirata[1]] != 1) //Fijarse si abajo no hay agua
         {
             posicionPirata[0]++;
         }
         break;
 
     case 'e':
-        if (tablero[posicionPirata[0]][posicionPirata[1]-1] != 1) //Fijarse si a la derecha no hay agua
+        if (posicionPirata[1]+1 < c && tablero[posicionPirata[0]][posicionPirata[1]+1] != 1) //Fijarse si a la derecha no hay agua
         {
             posicionPirata[1]++;
         }
         break;
 
     case 'o':
-        if (tablero[posicionPirata[0]][posicionPirata[1]-1] != 1) //Fijarse si a la izquierda no hay agua
+        if (posicionPirata[1]-1 >= 0 && tablero[posicionPirata[0]][posicionPirata[1]-1] != 1) //Fijarse si a la izquierda no hay agua
         {
             posicionPirata[1]--;
         }
         break;
 
     default:
-        printf("Posicion invalida\n");
+        printf("Posicion invalida\n\n");
         break;
     }
     if (tablero[posicionPirata[0]][posicionPirata[1]] == 20)
@@ -237,7 +227,7 @@ int main(void)
     int encontrado; // Variable para verificar si se encontró el tesoro
     int posicionPirata[2]; // Coordenadas del pirata en el tablero
     char mov; // Dirección de movimiento ingresada por el usuario
-    int turnos = 50; // Número máximo de turnos
+    int turnos; // Número máximo de turnos
     int salir = 0; // Variable para controlar si el usuario quiere salir del juego
 
     printf("Busqueda del tesoro! Intente encontrar el tesoro en menos de 50 turnos\n\n");
@@ -272,6 +262,7 @@ int main(void)
         inicializarTablero(tablero, filas, columnas, posicionPirata); // Inicializar el tablero
         dibujarTablero(tablero, filas, columnas); // Dibujar el tablero
         encontrado = 0; // Inicializar la variable de tesoro encontrado
+        turnos = 5;
 
         // Bucle de turnos del juego
         while (encontrado != 1 && turnos > 0)
@@ -289,7 +280,7 @@ int main(void)
             turnos--; 
         }
 
-        if (turnos == 0)
+        if (turnos == 0 && encontrado == 0)
         {
             printf("Se te acabaron los turnos, perdiste!\n"); 
         }
