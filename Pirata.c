@@ -239,7 +239,7 @@ int main(void) {
 
   while(1){
     // Limpiar la pantalla
-    system("clear");
+    system("cls");
 
     // Dibujar el título
     printf("\033[1;34m"); // Texto en azul
@@ -268,7 +268,7 @@ int main(void) {
     switch (opcion) {
     case 1:
       // Mostrar juego
-      system("clear");
+      system("cls");
         // Bucle principal del juego
         do {
           // Solicitar dimensiones del tablero al usuario
@@ -336,7 +336,7 @@ int main(void) {
       break;
     case 2:
       // Mostrar reglas
-      system("clear");
+      system("cls");
       printf("\033[1;34m"); // Texto en azul
       printf("┌────────────────────────────────┐\n");
       printf("│    Reglas del juego:           │\n");
@@ -351,7 +351,7 @@ int main(void) {
       break;
     case 3:
       // Mostrar controles
-      system("clear");
+      system("cls");
       printf("\033[1;34m"); // Texto en azul
       printf("┌────────────────────────────────┐\n");
       printf("│       Controles del juego:     │\n");
