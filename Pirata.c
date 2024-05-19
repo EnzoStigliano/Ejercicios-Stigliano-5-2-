@@ -12,10 +12,10 @@ void limpiarConsola() {
 
 int inicializarTablero(int **tablero, int f, int c, int posicionPirata[2]) {
   srand(time(NULL));
-  int salidas[f][c]; // Matriz donde se guardarÃ¡n las salidas
+  int salidas[f][c]; // Matriz donde se guardaran las salidas
   int dungeons[16][4] = {
-      // Lista de posibles salidas, si tiene un 1 es porque tiene salida para
-      // ese lado. Orden: izquierda, derecha, arriba, abajo
+      // Lista de posibles salidas, si tiene un 1 es porque tiene salida para ese lado
+      // Orden: izquierda, derecha, arriba, abajo
       {0, 0, 0, 0}, {0, 0, 0, 1}, {0, 0, 1, 0}, {0, 0, 1, 1},
       {0, 1, 0, 0}, {0, 1, 0, 1}, {0, 1, 1, 0}, {0, 1, 1, 1},
       {1, 0, 0, 0}, {1, 0, 0, 1}, {1, 0, 1, 0}, {1, 0, 1, 1},
@@ -24,16 +24,16 @@ int inicializarTablero(int **tablero, int f, int c, int posicionPirata[2]) {
   int j;                // Variable para for 2
   int fr = 0;           // Fila random
   int cr = 0;           // Columna random
-  int onoff = 1;        // iniciar o detener la generaciÃ³n de tierra
-  int flag;             // verificar si se genero un bloque de tierra
+  int onoff = 1;        // Iniciar o detener la generacion de tierra
+  int flag;             // Verificar si se genero un bloque de tierra
   int flagTesoro = 0;   // Verificar si se puso el tesoro
-  int salida;           // dungeon asignada
-  int cantDungeons = 0; // cantidad de tierra generada proceduralmente
-  int grwt;             // ground water
-  int tesoro;           // NÃºmero random para poner el tesoro
-  int aux = 0; // Contador de bloques de tierra donde no se generÃ³ el tesoro
+  int salida;           // Dungeon asignada
+  int cantDungeons = 0; // Cantidad de tierra generada proceduralmente
+  int grwt;             // Ground water
+  int tesoro;           // Numero random para poner el tesoro
+  int aux = 0; // Contador de bloques de tierra donde no se genero el tesoro
 
-  // Rellenar todo de 16 (nÃºmero que no estÃ© en el rango 0-15 inclusive)
+  // Rellenar todo de 16 (numero que no esta en el rango 0-15 inclusive)
   for (i = 0; i < f; i++) {
     for (j = 0; j < c; j++) {
       tablero[i][j] = 16;
@@ -47,22 +47,23 @@ int inicializarTablero(int **tablero, int f, int c, int posicionPirata[2]) {
   posicionPirata[0] = fr;
   posicionPirata[1] = cr;
 
-  // N de casilla random
+  // Numero de dungeon random
   salida = (rand() % 15) + 1;
 
   // Colocar el primer bloque de tierra
   salidas[fr][cr] = salida;
 
-  // GeneraciÃ³n procedural de tierra
+  // Generacion procedural de tierra
   while (onoff == 1) {
     flag = 0;
     for (i = 0; i < f; i++) {
       for (j = 0; j < c; j++) {
         if (salidas[i][j] == 16) {
-          // Cada vez que se genere un bloque de tierra se contarÃ¡ la cantidad
-          // de Ã©stos generados y si efectivamente se ha generado alguno
-          // Generar un bloque de tierra si hay otro a la izquierda y si ademÃ¡s
-          // Ã©ste tiene salida hacia la derecha
+          // Cada vez que se genere un bloque de tierra se contara la cantidad
+          // de estos generados y si efectivamente se ha generado alguno
+
+          // Generar un bloque de tierra si hay otro a la izquierda 
+          // y si ademas este tiene salida hacia la derecha
           if (j - 1 >= 0 && salidas[i][j - 1] != 16) {
             if (dungeons[salidas[i][j - 1]][0] == 1) {
               salida = rand() % 15;
@@ -72,7 +73,7 @@ int inicializarTablero(int **tablero, int f, int c, int posicionPirata[2]) {
             }
           } else if (i - 1 >= 0 && salidas[i - 1][j] != 16) 
           { // Generar un bloque de tierra si hay otro arriba
-            // y si ademÃ¡s Ã©ste tiene salida hacia abajo
+            // y si ademas este tiene salida hacia abajo
             if (dungeons[salidas[i - 1][j]][2] == 1) {
               salida = rand() % 15;
               salidas[i][j] = salida;
@@ -80,9 +81,8 @@ int inicializarTablero(int **tablero, int f, int c, int posicionPirata[2]) {
               flag = 1;
             }
           } else if (j + 1 < c && salidas[i][j + 1] != 16) { 
-            // Generar un bloque de tierra si hay otro a la
-            // derecha y si ademÃ¡s Ã©ste tiene salida hacia
-            // la izquierda
+            // Generar un bloque de tierra si hay otro a la derecha 
+            // y si ademas este tiene salida hacia la izquierda
             if (dungeons[salidas[i][j + 1]][1] == 1) {
               salida = rand() % 15;
               salidas[i][j] = salida;
@@ -92,7 +92,7 @@ int inicializarTablero(int **tablero, int f, int c, int posicionPirata[2]) {
           } else if (i + 1 < f &&
                      salidas[i + 1][j] != 16) { 
             // Generar un bloque de tierra si hay otro abajo
-            // y si ademÃ¡s Ã©ste tiene salida hacia arriba
+            // y si ademas este tiene salida hacia arriba
             if (dungeons[salidas[i + 1][j]][3] == 1) {
               salida = rand() % 15;
               salidas[i][j] = salida;
@@ -104,8 +104,7 @@ int inicializarTablero(int **tablero, int f, int c, int posicionPirata[2]) {
       }
     }
     if (flag == 0)
-      onoff = 0; // Si no se generÃ³ ningÃºn bloque de tierra se detiene el
-                 // bucle
+      onoff = 0; // Si no se genero ningun bloque de tierra se detiene bucle
   }
 
   // Colocar tesoro
@@ -122,8 +121,8 @@ int inicializarTablero(int **tablero, int f, int c, int posicionPirata[2]) {
         } else
           aux++;
       }
-      // Generar el tesoro en el Ãºltimo bloque de tierra en caso de que no se
-      // haya generado en los otros bloques
+      // Generar el tesoro en el ultimo bloque de tierra en caso de que no se
+      // haya generado en los otros
       if (aux == cantDungeons && salidas[i][j] != 16) {
         tablero[i][j] = 20;
       }
@@ -133,7 +132,7 @@ int inicializarTablero(int **tablero, int f, int c, int posicionPirata[2]) {
   tablero[fr][cr] = 21; // Poner al pirata
 
   // Poner tierra (0) en los bloques generados previamente, y aleatoriamente
-  // poner agua o tierra en el resto
+  // poner agua ()1 o tierra en el resto
   for (i = 0; i < f; i++) {
     for (j = 0; j < c; j++) {
       if (salidas[i][j] != 16 && tablero[i][j] != 20 && tablero[i][j] != 21) {
@@ -154,19 +153,19 @@ void dibujarTablero(int **tablero, int f, int c) {
     for (j = 0; j < c; j++) {
       switch (tablero[i][j]) {
       case 0:
-        printf("\033[0;32m██\033[0m"); // Color Verde para tierra
+        printf("\033[0;32m██\033[0m"); // Color verde para tierra
         break;
 
       case 1:
-        printf("\033[0;34m██\033[0m"); // Color Azul para agua
+        printf("\033[0;34m██\033[0m"); // Color azul para agua
         break;
 
       case 20:
-        printf("\033[0;32m██\033[0m"); // Color Verde para tierra con tesoro
-        break;
+        printf("\033[0;32m██\033[0m"); // Color verde para tierra con tesoro
+        break
 
       case 21:
-        printf("\033[0;31m██\033[0m"); // Color Rojo para Personaje
+        printf("\033[0;31m██\033[0m"); // Color rojo para pirata
         break;
       }
     }
@@ -193,9 +192,7 @@ int moverPirata(int posicionPirata[2], char mov, int **tablero, int f, int c,
     break;
 
   case 's':
-    if (posicionPirata[0] + 1 < f &&
-        tablero[posicionPirata[0] + 1][posicionPirata[1]] !=
-            1) // Fijarse si abajo no hay agua
+    if (posicionPirata[0] + 1 < f && tablero[posicionPirata[0]+1][posicionPirata[1]] != 1) // Fijarse si abajo no hay agua
     {
       posicionPirata[0]++;
     } else {
@@ -205,9 +202,7 @@ int moverPirata(int posicionPirata[2], char mov, int **tablero, int f, int c,
     break;
 
   case 'e':
-    if (posicionPirata[1] + 1 < c &&
-        tablero[posicionPirata[0]][posicionPirata[1] + 1] !=
-            1) // Fijarse si a la derecha no hay agua
+    if (posicionPirata[1] + 1 < c && tablero[posicionPirata[0]][posicionPirata[1]+1] != 1) // Fijarse si a la derecha no hay agua
     {
       posicionPirata[1]++;
     } else {
@@ -217,9 +212,7 @@ int moverPirata(int posicionPirata[2], char mov, int **tablero, int f, int c,
     break;
 
   case 'o':
-    if (posicionPirata[1] - 1 >= 0 &&
-        tablero[posicionPirata[0]][posicionPirata[1] - 1] !=
-            1) // Fijarse si a la izquierda no hay agua
+    if (posicionPirata[1] - 1 >= 0 && tablero[posicionPirata[0]][posicionPirata[1]-1] != 1) // Fijarse si a la izquierda no hay agua
     {
       posicionPirata[1]--;
     } else {
@@ -244,8 +237,8 @@ int main(void) {
   int columnas;
   int encontrado;        // Variable para verificar si se encontrÃ³ el tesoro
   int posicionPirata[2]; // Coordenadas del pirata en el tablero
-  char mov;              // DirecciÃ³n de movimiento ingresada por el usuario
-  int turnos;            // NÃºmero mÃ¡ximo de turnos
+  char mov;              // Direccion de movimiento ingresada por el usuario
+  int turnos;            // Numero mÃ¡ximo de turnos
   int salir = 0; // Variable para controlar si el usuario quiere salir del juego
 
   printf("Busqueda del tesoro! Intente encontrar el tesoro en menos de 50 "
@@ -265,18 +258,15 @@ int main(void) {
       if (columnas < 4) {
         printf("La cantidad de columnas no cumple con el minimo requerido\n\n");
       }
-    } while (filas < 4 ||
-             columnas < 4); // Seguir preguntando si las filas o las columnas no
-                            // cumplen con el mÃ­nimo
+    } while (filas < 4 || columnas < 4); // Seguir preguntando si las filas o las columnas no cumplen con el minimo
 
-    // ReservaciÃ³n de memoria para el puntero del tablero
+    // Reservacion de memoria para el puntero del tablero
     int **tablero = (int **)malloc(filas * sizeof(int *));
     for (int i = 0; i < filas; i++) {
       tablero[i] = (int *)malloc(columnas * sizeof(int));
     }
 
-    inicializarTablero(tablero, filas, columnas,
-                       posicionPirata);       // Inicializar el tablero
+    inicializarTablero(tablero, filas, columnas, posicionPirata); // Inicializar el tablero
     dibujarTablero(tablero, filas, columnas); // Dibujar el tablero
     encontrado = 0; // Inicializar la variable de tesoro encontrado
     turnos = 50;
@@ -286,12 +276,9 @@ int main(void) {
       printf("Turnos restantes: %d\n", turnos);
       printf("Ingrese la direccion a la que se quiere mover: ");
       scanf(" %c", &mov);
-      limpiarConsola(); // Limpiar la consola para mostrar el nuevo estado del
-                        // tablero
-      moverPirata(posicionPirata, mov, tablero, filas, columnas,
-                  &encontrado); // Mover al pirata
-      dibujarTablero(tablero, filas,
-                     columnas); // Dibujar el tablero actualizado
+      limpiarConsola(); // Limpiar la consola para mostrar el nuevo estado del tablero
+      moverPirata(posicionPirata, mov, tablero, filas, columnas, &encontrado); // Mover al pirata
+      dibujarTablero(tablero, filas, columnas); // Dibujar el tablero actualizado
       if (encontrado == 1) {
         printf("Encontraste el tesoro!\n");
       }
