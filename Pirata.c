@@ -53,7 +53,7 @@ if (gamemode == 1) { // Modo de juego normal
     do {
       fr = (rand() % (f - 2)) + 1;
       cr = (rand() % (c - 2)) + 1;
-    } while (tablero[fr][cr] == 1);
+    } while (tablero[fr][cr] == 21);
 
     tablero[fr][cr] = 20;
 
@@ -63,7 +63,7 @@ if (gamemode == 1) { // Modo de juego normal
         if (i == 0 || i == f - 1 || j == 0 || j == c - 1) {
           tablero[i][j] = 1;
         } 
-        else if(tablero[i][j] != 21) {
+        else if(tablero[i][j] != 21 && tablero[i][j] != 20) {
           tablero[i][j] = 0;
         }
       }
