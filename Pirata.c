@@ -42,8 +42,8 @@ int inicializarTablero(int **tablero, int f, int c, int posicionPirata[2], int g
 
 if (gamemode == 1) { // Modo de juego normal
     // Generar coordenadas para el pirata
-    fr = (rand() % (f - 1)) + 1;
-    cr = (rand() % (c - 1)) + 1;
+    fr = (rand() % (f - 2)) + 1;
+    cr = (rand() % (c - 2)) + 1;
 
     tablero[fr][cr] = 21;
     posicionPirata[0] = fr;
@@ -51,8 +51,8 @@ if (gamemode == 1) { // Modo de juego normal
 
     // Generar coordenadas para el tesoro
     do {
-      fr = (rand() % (f - 1)) + 1;
-      cr = (rand() % (c - 1)) + 1;
+      fr = (rand() % (f - 2)) + 1;
+      cr = (rand() % (c - 2)) + 1;
     } while (tablero[fr][cr] == 1);
 
     tablero[fr][cr] = 20;
@@ -380,6 +380,7 @@ int main(void) {
         dibujarTablero(tablero, filas, columnas); // Dibujar el tablero
         encontrado = 0; // Inicializar la variable de tesoro encontrado
         turnos = 50;
+        ahogado = 0;
 
         // Bucle de turnos del juego
         while (encontrado != 1 && turnos > 0 && ahogado == 0) {
