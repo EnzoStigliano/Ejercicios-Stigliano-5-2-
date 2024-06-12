@@ -13,7 +13,7 @@ void limpiarPantalla() {
 
 void esperar(int segundos) {
     #ifdef _WIN32
-    Sleep(segundos * 1000);
+    sleep(segundos * 1000);
     #else
     sleep(segundos);
     #endif
@@ -115,6 +115,24 @@ void iniciarJuego(int tablero[10][10], int visible[10][10], int jugadorFila, int
     }
 }
 
+void explicarJuego() {
+    limpiarPantalla();
+    printf("\033[1;32m┌─────────────────────────────────────────────┐\n\033[0m");
+    printf("\033[1;32m|          Explicación del Juego              |\n\033[0m");
+    printf("\033[1;32m├─────────────────────────────────────────────┤\n\033[0m");
+    printf("\033[1;32m| Bienvenido al Juego del Pozo!               |\n\033[0m");
+    printf("\033[1;32m| El objetivo es llegar desde la posición     |\n\033[0m");
+    printf("\033[1;32m| inicial (0,0) hasta la posición final (9,9) |\n\033[0m");
+    printf("\033[1;32m| en un tablero 10x10 sin caer en ninguno de  |\n\033[0m");
+    printf("\033[1;32m| los 3 pozos generados aleatoriamente.       |\n\033[0m");
+    printf("\033[1;32m| Buena suerte!                               |\n\033[0m");
+    printf("\033[1;32m├─────────────────────────────────────────────┤\n\033[0m");
+    printf("\033[1;32m| Presione Enter para continuar.              |\n\033[0m");
+    printf("\033[1;32m└─────────────────────────────────────────────┘\n\033[0m");
+    printf("\n");
+    getchar();
+}
+
 int main() {
     int tablero[10][10];
     int visible[10][10];
@@ -126,28 +144,32 @@ int main() {
 
     while (1) {
         limpiarPantalla();
-        printf("\033[1;34m****************************\n\033[0m");
-        printf("\033[1;34m*      Juego del Pozo      *\n\033[0m");
-        printf("\033[1;34m****************************\n\033[0m");
-        printf("\033[1;34m* 1. Iniciar juego         *\n\033[0m");
-        printf("\033[1;34m* 2. Salir                 *\n\033[0m");
-        printf("\033[1;34m****************************\n\033[0m");
-        printf("\033[1;36mSeleccione una opción: \033[0m");
-
+        printf("\033[1;34m┌──────────────────────────────┐\n\033[0m");
+        printf("\033[1;34m│      Juego del Pozo          │\n\033[0m");
+        printf("\033[1;34m├──────────────────────────────┤\n\033[0m");
+        printf("\033[1;34m│ 1. Explicacion del juego     │\n\033[0m");
+        printf("\033[1;34m│ 2. Iniciar juego             │\n\033[0m");
+        printf("\033[1;34m│ 3. Salir                     │\n\033[0m");
+        printf("\033[1;34m└──────────────────────────────┘\n\033[0m");
+        printf("\033[1;36mSeleccione una opcion: \033[0m");
         scanf("%d", &opcion);
+        getchar();  // Para capturar el salto de línea tras el scanf
 
-        if (opcion != 1) {
-            exit(0);
-        }
-        srand(time(NULL));
-        inicializarTablero(tablero, visible);
-        tablero[0][0] = 1;
+        if (opcion == 1) {
+            explicarJuego();
+        } else if (opcion == 2) {
+            srand(time(NULL));
+            inicializarTablero(tablero, visible);
+            tablero[0][0] = 1;
 
-        iniciarJuego(tablero, visible, jugadorFila, jugadorCol, vidas);
+            iniciarJuego(tablero, visible, jugadorFila, jugadorCol, vidas);
 
-        printf("\033[1;36m¿Desea jugar de nuevo? (s/n): \033[0m");
-        scanf(" %c", &choice);
-        if (choice != 's') {
+            printf("\033[1;36m¿Desea jugar de nuevo? (s/n): \033[0m");
+            scanf(" %c", &choice);
+            if (choice != 's') {
+                exit(0);
+            }
+        } else {
             exit(0);
         }
     }
