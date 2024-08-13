@@ -1,36 +1,35 @@
+import java.util.Scanner;
 
-/*
 public class Main 
 {
     public static void main(String[] args) {
-        int input;
         int i;
         int j;
-        boolean flag;
-        boolean flag2 = false;
+        int input;
+        boolean flag = false;
+        Scanner scanner = new Scanner(System.in);
         
         do {
             System.out.printf("Ingrese un numero mayor a 100: ");
-            System.in.scanf("%d", &input);
-            if(input <= 100) System.out.printf("El numero debe ser mayor a 100, vuelva a intentar\n");
+            input = scanner.nextInt();
+            if(input <= 100) System.out.printf("El numero debe ser mayor a 100, vuelva a intentar\n\n");
             else {
-                flag = true;
-		        flag2 = true;
+		        flag = true;
 		        for(j=2;j<input-1;j++){
 		                if(input % j == 0) {
 		                System.out.printf("%d ", j);
-		                flag2 = false;
+		                flag = false;
 		            }
 		        }
-		        if(flag2) System.out.printf(" es primo");
+		        if(flag) System.out.printf(" es primo");
 		        System.out.printf("\n");
             }
-        } while(!flag2);
+        } while(!flag);
     }    
 }
-*/
 
 
+/*
 public class Main
 {
     public static void main(String[] args) {
@@ -58,7 +57,7 @@ public class Main
 		}
     }
 }
-
+*/
 
 /*
 public class Main
